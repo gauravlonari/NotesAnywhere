@@ -6,25 +6,25 @@ const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const fetchuser=require("../middleware/fetchuser.js")
 
-const JWT_SECRET=process.env.JWT_TOKEN;
+const JWT_SECRET=require("../keys/jwtsecretkey").JWT_SECRET_KEY;
 
 // create a user endpoint using POST
 router.post ("/createuser",[
     body("name","Enter name without space, numbers or special characters").isAlpha(),
     body("email","Enter a valid Email").isEmail(),
-    body("password","Password length should be greater than 5 and less than 10").isLength({min:6,max:10}),
+    body("password","Password length should be greater than 8 and less than 32").isLength({min:8,max:32}),
 ], async (req,res)=>{
 
     try {
         
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array(),error:"Error in parameters"  });
     }
 
     let user=await User.findOne({email:req.body.email})
     if(user){
-        return res.status(400).json({error:"Email Id already exists"});
+        return res.status(400).json({error:"Email Id already exists, please try signing in"});
     }
 
     const securedPassword=await bcrypt.hash(req.body.password,await bcrypt.genSalt(10));
@@ -49,8 +49,8 @@ router.post ("/createuser",[
     // .catch(error=>{ console.log(error),res.json({error:"Email id already exists",message:error.message}) });
 
     } catch (error) {
-        console.log("getuser: "+error.message);
-        res.status(500).send("Internal Server Error");
+        console.log("createuser: "+error.message);
+        res.status(500).json({error:"Internal Server Error"});
     }
 })
 
@@ -65,7 +65,7 @@ router.post ("/login",[
         
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array(),error:"Error in parameters"  });
     }
 
     const {email,password}=req.body;
@@ -94,7 +94,7 @@ router.post ("/login",[
 
     } catch (error) {
         console.log("login: "+error.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({error:"Internal Server Error"});
     }
 })
 
@@ -103,7 +103,7 @@ router.post ("/login",[
 router.post ("/getuser",fetchuser,async (req,res)=>{
 
     try {
-    
+        
     let user=await User.findById(req.user.id).select("-password");
     if(!user){
         return res.status(400).json({error:"User does not exist, try signing up first"});
@@ -113,7 +113,7 @@ router.post ("/getuser",fetchuser,async (req,res)=>{
 
     } catch (error) {
         console.log("getuser: "+error.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({error:"Internal Server Error"});
     }
 })
 
