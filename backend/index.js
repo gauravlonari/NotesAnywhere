@@ -1,17 +1,21 @@
 const express=require('express')
-const connectToMongo=require('./db.js');
+const connectDB=require('./db.js');
+require("dotenv").config();
 
-const port = 3000
+const port = 5000
 const app=express();
-// connectToMongo();
+connectDB();
+
+app.use(express.json())
+app.use("/api/auth",require('./routes/auth.js'))
+app.use("/api/notes",require('./routes/notes.js'))
 
 app.get('/', (req, res) => {
-  res.send('Hello User!')   
+  res.send('Homepage!')   
 })
+
+app.get('/saymyname',(req,res)=>{res.send("Gaurav Lonari");})
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`NotesAnywhere app listening on port ${port}`)
 })
-
-app.get('/saymyname',(req,res)=>{res.send("Gaurav Lonari")})
-
