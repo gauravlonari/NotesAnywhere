@@ -72,7 +72,7 @@ export default function LoginState(props) {
     }
   };
 
-  const getProfile=async ()=>{
+  const userGetProfile=async ()=>{
     try {
       const data = await fetch(host + "/api/auth/getuser", {
         method: "POST",
@@ -94,9 +94,37 @@ export default function LoginState(props) {
         console.log(e.message);
       }
     }
+    const userChangePassword=async (pass,newpass)=>{
+      try{
+        const data = await fetch(host + "/api/auth/changepassword", {
+          method: "POST",
+          headers: {
+            "auth-token": localStorage.getItem('token'),
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({password:pass,newpassword:newpass})
+        });
+        const jsonData = await data.json();
+  
+        if(checkUnauthorized(data.status)){
+          if (data.status !== 200) {
+            showAlert("danger", jsonData.error);
+            return false;
+          }
+          showAlert("success","Password Changed");
+          navigate('/')
+          return true;
+        }
+      }
+      catch(e){
+        console.log(e.message)
+        showAlert("danger","Some Error Occured")
+        return false;
+      }
+    }
 
   return (
-    <loginContext.Provider value={{ userLogin, userRegister,isLoggedIn,setIsLoggedIn,getProfile }}>
+    <loginContext.Provider value={{ userLogin, userRegister,isLoggedIn,setIsLoggedIn,userGetProfile,userChangePassword }}>
       {props.children}
     </loginContext.Provider>
   );

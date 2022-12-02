@@ -28,7 +28,7 @@ export default function Header() {
                 <form className="d-flex">
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/login") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="/session/login">Login</NavLink>
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/register") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="session/register">Register</NavLink>
-                    <NavLink className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} role="button" to="profile">Profile</NavLink>
+                    <NavLink className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token') && !currentLocation.includes("/profile")?"":"visually-hidden")}`} role="button" to="profile">Profile</NavLink>
                     <button className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} onClick={(e)=>{e.preventDefault();localStorage.removeItem('token');navigate('/session/login')}}>Logout</button>
                 </form>
                 {/* <form className={`d-flex ${currentLocation ==="/"?"":"visually-hidden"}`} role="search" onSubmit={event=>{event.preventDefault()}}>

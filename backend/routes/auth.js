@@ -41,7 +41,6 @@ router.post ("/createuser",[
         }
     }
     const authToken=jwt.sign(data,JWT_SECRET);
-    console.log(authToken);
     res.json({authToken});
 
     // res.status(201).send("User Created")
@@ -114,6 +113,40 @@ router.post ("/getuser",fetchuser,async (req,res)=>{
     } catch (error) {
         console.log("getuser: "+error.message);
         res.status(500).json({error:"Internal Server Error"});
+    }
+})
+// Change password endpoint using POST
+router.post ("/changepassword",fetchuser,[
+    body("newpassword","New password length should be greater than 8 and less than 32").isLength({min:8,max:32}),
+],async (req,res)=>{
+
+    try {
+    
+    const {password,newpassword}=req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array(),error:"Wrong Credentials. Cannot authenticate."  });
+    }
+
+    let user=await User.findById(req.user.id);
+    
+    if(!user){
+        return res.status(400).json({error:"User Not Found"});
+    }
+    const passwordCompare=await bcrypt.compare(password,user.password);
+    if(passwordCompare){
+        const securedPassword=await bcrypt.hash(newpassword,await bcrypt.genSalt(10));
+        const updated=await User.findByIdAndUpdate(req.user.id,{password:securedPassword},{new:true});
+        return res.json({message:"Password Changed"});
+    }
+    else{
+        return res.status(400).json({error:"Wrong Credentials. Cannot authenticate."});
+    }
+
+    } catch (error) {
+        console.log("changepassword: "+error.message);
+        return res.status(500).json({error:"Internal Server Error"});
     }
 })
 

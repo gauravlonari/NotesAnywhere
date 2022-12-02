@@ -3,9 +3,17 @@ import loginContext from '../../context/login/LoginContext';
 import { TextField } from '@mui/material'
 import { useState } from 'react';
 import { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Register() {
+    const navigate=useNavigate()
+    useEffect(()=>{
+      if(localStorage.getItem('token')){
+        navigate('/')
+      }
+    // eslint-disable-next-line
+    },[])
     const { userRegister } = useContext(loginContext);
     const [credentials, setCredentials] = useState({ name:"", email: "", password: "",cpassword:""});
     const onChange = (e) => {

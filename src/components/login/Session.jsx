@@ -1,14 +1,7 @@
-import React, { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 export default function Session() {
-  const navigate=useNavigate()
-  useEffect(()=>{
-    if(localStorage.getItem('token')){
-      navigate('/')
-    }
-  // eslint-disable-next-line
-  },[])
   return (
     <>
       <div className="row min-page-height align-items-center">
