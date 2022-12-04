@@ -11,8 +11,8 @@ require('dotenv').config({path: path.relative(process.cwd(), path.join(__dirname
 const connectDB=require('./db.js');
 const startApp=async ()=>{
   if(await connectDB()){ 
-    app.use(express.json())
     app.use(cors());
+    app.use(express.json())
     app.use("/api/auth",require('./routes/auth.js'))
     app.use("/api/notes",require('./routes/notes.js'))
     
