@@ -32,6 +32,8 @@ export default function LoginState(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS'
         },
         body: JSON.stringify(creds),
       });

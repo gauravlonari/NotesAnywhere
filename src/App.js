@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import Header from "./components/header/Header";
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route, HashRouter as Router } from "react-router-dom";
 import About from "./components/about/About";
 import NoteState from "./context/notes/NoteState";
 import Homepage from "./components/homepage/Homepage";
