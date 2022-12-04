@@ -1,7 +1,7 @@
 const { default: mongoose, mongo } = require("mongoose");
 
-// const mongoURI="mongodb://localhost:27017/notesanywhere";
-const mongoURI=process.env.MONGO_URI;
+const mongoURI="mongodb://localhost:27017/notesanywhere";
+// const mongoURI=process.env.MONGO_URI;
 
 async function connectToMongo(){
     console.log("Connecting to Database")

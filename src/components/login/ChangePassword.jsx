@@ -7,11 +7,13 @@ import loginContext from '../../context/login/LoginContext';
 import {useState} from 'react'
 import {NavLink} from 'react-router-dom'
 import {TextField} from '@mui/material'
+import loadingContext from '../../context/loading/LoadingContext';
 
 export default function ChangePassword() {
   const {userChangePassword}=useContext(loginContext)
   const navigate=useNavigate();
   const {showAlert}=useContext(alertContext)
+  const {progress}=useContext(loadingContext)
   useEffect(()=>{
     if(!localStorage.getItem('token')){
       navigate('/session/login');
@@ -75,7 +77,7 @@ export default function ChangePassword() {
                     <NavLink className="text-decoration-none" onClick={()=>{navigate(-1)}}>Don't want to cancel? Go back</NavLink>
                 </div>
 
-                <button type="submit" className="btn btn-primary">Change Password</button>
+                <button type="submit" className="btn btn-primary" disabled={progress?true:false}>Change Password</button>
             </form>
     </div>
   )

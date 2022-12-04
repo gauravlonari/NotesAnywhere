@@ -5,19 +5,23 @@ import host from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import loadingContext from '../loading/LoadingContext'
 
 export default function NoteState(props) {
   const navigate = useNavigate();
   const { showAlert } = useContext(alertContext);
+  const {setProgress}=useContext(loadingContext);
 
   const checkUnauthorized = (status) => {
     if (status === 401) {
       try {
         showAlert("info", "You need to login first");
         localStorage.removeItem("token");
+        setProgress(100);
         navigate("/session/login");
       } catch (e) {
         console.log(e.message);
+        setProgress(100);
         navigate("/session/login");
       }
       return false;
@@ -27,6 +31,7 @@ export default function NoteState(props) {
 
   const fetchAllNotes = async () => {
     try {
+      setProgress(10);
       const data = await fetch(host + "/api/notes/fetchallnotes", {
         method: "GET",
         headers: {
@@ -34,16 +39,17 @@ export default function NoteState(props) {
           "auth-token":
             localStorage.getItem('token'),
         },
-        signal: AbortSignal.timeout(10000),
       });
-
+      setProgress(40);
       let ns = await data.json();
-
+      setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
           showAlert("danger", ns.error);
+          setProgress(100);
         } else {
           setNotes(ns);
+          setProgress(100);
         }
       }
     } catch (e) {
@@ -62,6 +68,7 @@ export default function NoteState(props) {
           false
         );
       console.log(e);
+      setProgress(100)
     }
   };
 
@@ -69,7 +76,7 @@ export default function NoteState(props) {
 
   const updateNote = async (note) => {
     // console.log("update")
-
+    setProgress(10);
     try {
       const data = await fetch(host + "/api/notes/updatenote/" + note._id, {
         method: "PUT",
@@ -83,13 +90,15 @@ export default function NoteState(props) {
           "auth-token":
           localStorage.getItem('token'),
         },
-        signal: AbortSignal.timeout(5000),
+        
       });
-
+      setProgress(40);
       note = await data.json();
+      setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
           showAlert("danger", note.error);
+          setProgress(100);
           return false;
         }
         showAlert("success", "Note Updated");
@@ -98,6 +107,7 @@ export default function NoteState(props) {
             return n._id === note._id ? note : n;
           })
         );
+        setProgress(100);
         return true;
       }
     } catch (e) {
@@ -106,13 +116,14 @@ export default function NoteState(props) {
         "Some Error Occured while connecting to server. Cannot update the note"
       );
       console.log(e);
+      setProgress(100);
       return false;
     }
   };
 
   const deleteNote = async (id) => {
     // console.log("delete")
-
+    setProgress(10);
     try {
       const data = await fetch(host + "/api/notes/deletenote/" + id, {
         method: "DELETE",
@@ -121,12 +132,14 @@ export default function NoteState(props) {
           "auth-token":
           localStorage.getItem('token'),
         },
-        signal: AbortSignal.timeout(5000),
       });
+      setProgress(40);
       let note = await data.json();
+      setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
           showAlert("danger", note.error);
+          setProgress(100);
           return;
         }
         showAlert("success", "Note Deleted");
@@ -135,6 +148,7 @@ export default function NoteState(props) {
             return note._id !== id;
           })
         );
+        setProgress(100);
       }
     } catch (e) {
       showAlert(
@@ -142,10 +156,12 @@ export default function NoteState(props) {
         "Some Error Occured while connecting to server. Cannot delete the note"
       );
       console.log(e.message);
+      setProgress(100);
     }
   };
 
   const addNote = async (note) => {
+    setProgress(10);
     try {
       const data = await fetch(host + "/api/notes/addnote", {
         method: "POST",
@@ -155,17 +171,20 @@ export default function NoteState(props) {
           "auth-token":
           localStorage.getItem('token'),
         },
-        signal: AbortSignal.timeout(5000),
       });
-
+      setProgress(40);
       note = await data.json();
+      setProgress(70);
+
       if (checkUnauthorized(data.status)) {
         if (data.status !== 201) {
           showAlert("danger", note.error);
+          setProgress(100);
           return false;
         }
         showAlert("success", "Note Created");
         setNotes(notes.concat(note));
+        setProgress(100);
         return true;
       }
     } catch (e) {
@@ -174,6 +193,7 @@ export default function NoteState(props) {
         "Some Error Occured while connecting to server. Cannot add the note"
       );
       console.log(e.message);
+      setProgress(100);
       return false;
     }
   };

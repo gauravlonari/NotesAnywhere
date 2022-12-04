@@ -5,8 +5,10 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import loadingContext from '../../context/loading/LoadingContext';
 
 export default function Login() {
+    const {progress}=useContext(loadingContext)
     const navigate=useNavigate()
     useEffect(()=>{
       if(localStorage.getItem('token')){
@@ -52,7 +54,7 @@ export default function Login() {
           <input type="checkbox" className="form-check-input" id="exampleCheck1" />
           <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
         </div> */}
-                <button type="submit" className="btn btn-primary">Login</button>
+                <button type="submit" className="btn btn-primary" disabled={progress?true:false}>Login</button>
             </form>
         </>
     )

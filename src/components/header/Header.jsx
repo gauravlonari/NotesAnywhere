@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import loadingContext from "../../context/loading/LoadingContext";
 
 export default function Header() {
+    const {setProgress}= useContext(loadingContext);
     const currentLocation=useLocation().pathname;
     const navigate=useNavigate();
   return (
@@ -29,7 +31,7 @@ export default function Header() {
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/login") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="/session/login">Login</NavLink>
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/register") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="session/register">Register</NavLink>
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token') && !currentLocation.includes("/profile")?"":"visually-hidden")}`} role="button" to="profile">Profile</NavLink>
-                    <button className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} onClick={(e)=>{e.preventDefault();localStorage.removeItem('token');navigate('/session/login')}}>Logout</button>
+                    <button className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} onClick={(e)=>{e.preventDefault();setProgress(30);localStorage.removeItem('token');setProgress(100);navigate('/session/login');}}>Logout</button>
                 </form>
                 {/* <form className={`d-flex ${currentLocation ==="/"?"":"visually-hidden"}`} role="search" onSubmit={event=>{event.preventDefault()}}>
                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>

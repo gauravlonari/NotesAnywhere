@@ -4,8 +4,10 @@ import AddIcon from "@mui/icons-material/Add";
 import ncontext from "../../context/notes/NoteContext";
 import { useContext, useState } from "react";
 import { useRef } from "react";
+import loadingContext from '../../context/loading/LoadingContext';
 
 export default function AddNote() {
+  const {progress}=useContext(loadingContext)
   const addNoteForm = useRef(null);
   const { addNote } = useContext(ncontext);
   const [titleError, setTitleError] = useState({ error: false, errorText: "" });
@@ -113,6 +115,7 @@ export default function AddNote() {
               startIcon={<AddIcon />}
               type="submit"
               onClick={handleAddForm}
+              disabled={progress?true:false}
             >
               Add Note
             </Button>

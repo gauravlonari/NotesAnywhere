@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import loginContext from "./LoginContext";
 import host from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import loadingContext from '../loading/LoadingContext'
 
 export default function LoginState(props) {
   const { showAlert } = useContext(alertContext);
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {setProgress}=useContext(loadingContext);
 
   const checkUnauthorized = (status) => {
     if (status === 401) {
       try {
         showAlert("info", "You need to login first");
         localStorage.removeItem("token");
+        setProgress(100);
         navigate("/session/login");
       } catch (e) {
         console.log(e.message);
+        setProgress(100);
         navigate("/session/login");
       }
       return false;
@@ -27,6 +32,7 @@ export default function LoginState(props) {
 
   const userLogin = async (creds) => {
     try {
+      setProgress(10);
       const data = await fetch(host + "/api/auth/login", {
         // mode:"no-cors",
         method: "POST",
@@ -37,22 +43,28 @@ export default function LoginState(props) {
         },
         body: JSON.stringify(creds),
       });
+      setProgress(40);
       const jsonData = await data.json();
-
+      setProgress(70)
       if (data.status !== 200) {
         showAlert("danger", jsonData.error);
+        setProgress(100);
         return;
       }
       localStorage.setItem("token", jsonData.authToken);
       showAlert("success", "Login successful.");
+      setProgress(90);
       navigate("/");
+      setProgress(100);
     } catch (e) {
       showAlert("danger", "Some Error Occured");
       console.log(e);
+      setProgress(100)
     }
   };
   const userRegister = async (creds) => {
     try {
+      setProgress(10)
       const data = await fetch(host + "/api/auth/createuser", {
         method: "POST",
         headers: {
@@ -60,45 +72,55 @@ export default function LoginState(props) {
         },
         body: JSON.stringify(creds),
       });
+      setProgress(40);
       const jsonData = await data.json();
-
+      setProgress(70)
       if (data.status !== 200) {
         showAlert("danger", jsonData.error);
+        setProgress(100);
         return;
       }
       localStorage.setItem("token", jsonData.authToken);
       showAlert("success", "Registration successful. Logged in");
+      setProgress(100)
       navigate("/");
     } catch (e) {
       showAlert("danger", "Some Error Occured");
       console.log(e.message);
+      setProgress(100)
     }
   };
 
   const userGetProfile=async ()=>{
     try {
+      setProgress(10)
       const data = await fetch(host + "/api/auth/getuser", {
         method: "POST",
         headers: {
           "auth-token": localStorage.getItem('token'),
         },
       });
+      setProgress(40)
       const jsonData = await data.json();
-
+      setProgress(70)
       if(checkUnauthorized(data.status)){
         if (data.status !== 200) {
           showAlert("danger", jsonData.error);
+          setProgress(100)
           return null;
         }
+        setProgress(100)
         return jsonData;
       }
       } catch (e) {
         showAlert("danger", "Some Error Occured");
         console.log(e.message);
+        setProgress(100)
       }
     }
     const userChangePassword=async (pass,newpass)=>{
       try{
+        setProgress(10)
         const data = await fetch(host + "/api/auth/changepassword", {
           method: "POST",
           headers: {
@@ -107,14 +129,17 @@ export default function LoginState(props) {
           },
           body:JSON.stringify({password:pass,newpassword:newpass})
         });
+        setProgress(40)
         const jsonData = await data.json();
-  
+        setProgress(70)
         if(checkUnauthorized(data.status)){
           if (data.status !== 200) {
             showAlert("danger", jsonData.error);
+            setProgress(100)
             return false;
           }
           showAlert("success","Password Changed");
+          setProgress(100)
           navigate('/')
           return true;
         }
@@ -122,12 +147,13 @@ export default function LoginState(props) {
       catch(e){
         console.log(e.message)
         showAlert("danger","Some Error Occured")
+        setProgress(100)
         return false;
       }
     }
 
   return (
-    <loginContext.Provider value={{ userLogin, userRegister,isLoggedIn,setIsLoggedIn,userGetProfile,userChangePassword }}>
+    <loginContext.Provider value={{ userLogin, userRegister,userGetProfile,userChangePassword }}>
       {props.children}
     </loginContext.Provider>
   );

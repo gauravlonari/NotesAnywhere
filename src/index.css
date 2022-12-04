@@ -19,3 +19,11 @@ a{
     font-size: 3rem;
     user-select: none;
 }
+.note-item-options{
+    border: none;
+    color: var(--bs-link-color);
+    background: none;
+}
+.note-item-options:hover{
+    color: var(--bs-link-hover-color);
+}
