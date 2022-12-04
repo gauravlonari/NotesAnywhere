@@ -28,5 +28,12 @@ const startApp=async ()=>{
       console.log(`NotesAnywhere app listening on port ${port}`)
     })
   }
+  else{
+    throw new TypeError("CANNOT CONNECT TO DATABASE");
+  }
 }
-startApp();
+try{
+  startApp();
+}catch(e){
+  app.get('*',(req,res)=>{res.send("INTERNAL SERVER ERROR")})
+}
