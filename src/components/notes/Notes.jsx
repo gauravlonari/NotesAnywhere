@@ -31,7 +31,14 @@ export default function Notes() {
   // eslint-disable-next-line
   useEffect(()=>{
     if(localStorage.getItem('token')){
-      notesContext.fetchAllNotes()
+      if(!sessionStorage.getItem("fot")){
+        if(notesContext.fetchAllNotes()){
+          sessionStorage.setItem("fot",true);
+        }
+        else{
+          sessionStorage.setItem("fot",false);
+        }
+      }
     }
     else{
       navigate('/session/login');

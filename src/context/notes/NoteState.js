@@ -47,9 +47,11 @@ export default function NoteState(props) {
         if (data.status !== 200) {
           showAlert("danger", ns.error);
           setProgress(100);
+          return false;
         } else {
           setNotes(ns);
           setProgress(100);
+          return true;
         }
       }
     } catch (e) {
@@ -68,7 +70,8 @@ export default function NoteState(props) {
           false
         );
       console.log(e);
-      setProgress(100)
+      setProgress(100);
+      return false;
     }
   };
 
