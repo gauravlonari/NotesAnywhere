@@ -20,6 +20,8 @@ const startApp=async ()=>{
       res.sendFile(path.join(__dirname,'/index.html'));
     })
 
+    app.use('/404',express.static(path.join(__dirname,'404')));
+
     app.get("/shoutout",(req,res)=>{
       res.send("<h2>NotesAnywhere</h2>");
     })

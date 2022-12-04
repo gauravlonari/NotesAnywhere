@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NotesAnywhere Server</title>
+    <title>404 Not Found</title>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
@@ -146,7 +146,7 @@
       }
 
       .bg-purple {
-        background: url(http://salehriaz.com/404Page/img/bg_purple.png);
+        background: url("./404/bg_purple.png");
         background-repeat: repeat-x;
         background-size: cover;
         background-position: left top;
@@ -264,15 +264,15 @@
         transform: translateX(-50px);
         top: 75%;
         pointer-events: none;
-    }
-    .object_rocket:first-of-type{
+      }
+      .object_rocket:first-of-type {
         animation: rocket-movement 200s linear infinite both running;
-    }
-    .object_rocket:last-of-type{
-        right:-50px;
+      }
+      .object_rocket:last-of-type {
+        right: -50px;
         transform: rotate(235deg);
         animation: rocket-movement1 200s linear infinite both running;
-    }
+      }
 
       .object_earth {
         position: absolute;
@@ -294,6 +294,7 @@
       }
 
       .object_astronaut {
+        user-select: none;
         animation: rotate-astronaut 200s infinite linear both alternate;
       }
 
@@ -302,6 +303,7 @@
         position: absolute;
         top: 60%;
         right: 20%;
+        width:168px;
         will-change: transform;
         animation: move-astronaut 50s infinite linear both alternate;
       }
@@ -313,7 +315,7 @@
       }
 
       .stars {
-        background: url(http://salehriaz.com/404Page/img/overlay_stars.svg);
+        background: url("./404/overlay_stars.svg");
         background-repeat: repeat;
         background-size: contain;
         background-position: left top;
@@ -388,45 +390,24 @@
         </div>
       </div>
       <div class="central-body">
-        <img
-          class="image-404"
-          src="http://salehriaz.com/404Page/img/404.svg"
-          width="300px"
-        />
-        <a
-          href="http://gauravlonari.github.io/notesanywhere/#/"
-          class="btn-go-home"
-          >Go to NotesAnywhere App</a
+        <img class="image-404" src="./404/404.svg" width="300px" />
+        <a href="http://gauravlonari.github.io" class="btn-go-home"
+          >WHILE YOU ARE LOST TAKE A LOOK AT MY RESUME</a
         >
       </div>
       <div class="objects">
-        <img
-          class="object_rocket"
-          src="http://salehriaz.com/404Page/img/rocket.svg"
-          width="40px"
-        />
-        <img
-          class="object_rocket"
-          src="http://salehriaz.com/404Page/img/rocket.svg"
-          width="40px"
-        />
+        <img class="object_rocket" src="./404/rocket.svg" width="40px" />
+        <img class="object_rocket" src="./404/rocket.svg" width="40px" />
         <div class="earth-moon">
-          <img
-            class="object_earth"
-            src="http://salehriaz.com/404Page/img/earth.svg"
-            width="100px"
-          />
-          <img
-            class="object_moon"
-            src="http://salehriaz.com/404Page/img/moon.svg"
-            width="80px"
-          />
+          <img class="object_earth" src="./404/earth.svg" width="100px" />
+          <img class="object_moon" src="./404/moon.svg" width="80px" />
         </div>
         <div class="box_astronaut">
           <img
             class="object_astronaut"
-            src="http://salehriaz.com/404Page/img/astronaut.svg"
+            src="./404/austronaut.svg"
             width="140px"
+            draggable="true"
           />
         </div>
       </div>
@@ -439,4 +420,37 @@
       </div>
     </div>
   </body>
+  <script>
+    let newPosX = 0, newPosY = 0, startPosX = 0, startPosY = 0;
+    let el;
+    function mouseMove(e) {
+        // calculate the new position
+        newPosX = startPosX - e.clientX;
+        newPosY = startPosY - e.clientY;
+
+        // with each move we also want to update the start X and Y
+        startPosX = e.clientX;
+        startPosY = e.clientY;
+
+        // set the element's new position:
+        el.style.top = (el.offsetTop - newPosY) + "px";
+        el.style.left = (el.offsetLeft - newPosX) + "px";
+    }
+
+    window.addEventListener("load",()=>{
+        el=document.querySelector(".box_astronaut");
+        el.addEventListener('mousedown', function(e){
+            e.preventDefault();
+            // get the starting position of the cursor
+            startPosX = e.clientX;
+            startPosY = e.clientY;
+
+            document.addEventListener('mousemove', mouseMove);
+
+            document.addEventListener('mouseup', function(){
+                document.removeEventListener('mousemove', mouseMove);
+            });
+        })
+    })
+  </script>
 </html>
