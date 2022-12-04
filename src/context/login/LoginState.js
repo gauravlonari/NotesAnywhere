@@ -46,7 +46,7 @@ export default function LoginState(props) {
       navigate("/");
     } catch (e) {
       showAlert("danger", "Some Error Occured");
-      console.log(e.message);
+      console.log(e);
     }
   };
   const userRegister = async (creds) => {
