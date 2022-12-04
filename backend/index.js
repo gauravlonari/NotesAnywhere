@@ -20,6 +20,10 @@ const startApp=async ()=>{
       res.sendFile(path.join(__dirname,'/index.html'));
     })
 
+    app.get("/shoutout",(req,res)=>{
+      res.send("<h2>NotesAnywhere</h2>");
+    })
+
     app.listen(port, () => {
       console.log(`NotesAnywhere app listening on port ${port}`)
     })
