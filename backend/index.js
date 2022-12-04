@@ -1,5 +1,4 @@
 const express=require('express')
-const connectDB=require('./db.js');
 const dotenv= require("dotenv")
 const path=require('path')
 const cors=require("cors")
@@ -9,6 +8,7 @@ const app=express();
 
 require('dotenv').config({path: path.relative(process.cwd(), path.join(__dirname,'.env'))});
 
+const connectDB=require('./db.js');
 const startApp=async ()=>{
   if(await connectDB()){ 
     app.use(express.json())
@@ -29,7 +29,7 @@ const startApp=async ()=>{
     })
   }
   else{
-    throw new TypeError("CANNOT CONNECT TO DATABASE");
+    throw TypeError("CANNOT CONNECT TO DATABASE");
   }
 }
 try{
