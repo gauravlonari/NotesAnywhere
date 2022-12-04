@@ -28,7 +28,7 @@ export default function LoginState(props) {
   const userLogin = async (creds) => {
     try {
       const data = await fetch(host + "/api/auth/login", {
-        mode:"no-cors",
+        // mode:"no-cors",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
