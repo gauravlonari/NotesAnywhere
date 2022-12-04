@@ -6,7 +6,7 @@ const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const fetchuser=require("../middleware/fetchuser.js")
 
-const JWT_SECRET=require("../keys/jwtsecretkey").JWT_SECRET_KEY;
+const JWT_SECRET=process.env.JWT_SECRET_KEY;
 
 // create a user endpoint using POST
 router.post ("/createuser",[
