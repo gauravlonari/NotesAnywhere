@@ -157,12 +157,14 @@
       .custom-navbar {
         padding-top: 15px;
         position: fixed;
+        width:100%;
       }
 
       .brand-logo {
         margin-left: 25px;
         margin-top: 5px;
-        display: inline-block;
+        display: block;
+
       }
 
       ul {
@@ -307,6 +309,14 @@
         will-change: transform;
         animation: move-astronaut 50s infinite linear both alternate;
       }
+      @media screen and (max-width:600px) {
+        .box_astronaut{
+          top:10%;
+        }
+        .brand-logo{
+          text-align: center  ;
+        }
+      }
 
       .image-404 {
         position: relative;
@@ -446,6 +456,7 @@
             startPosY = e.clientY;
 
             document.addEventListener('mousemove', mouseMove);
+            document.addEventListener('touchmove', mouseMove);
 
             document.addEventListener('mouseup', function(){
                 document.removeEventListener('mousemove', mouseMove);
