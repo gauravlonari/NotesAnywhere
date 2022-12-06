@@ -5,6 +5,7 @@ import DeleteNoteDialog from './DeleteNoteDialog';
 import EditNoteDialog from './EditNoteDialog';
 import { useNavigate } from 'react-router-dom';
 import alertContext from '../../context/alert/AlertContext';
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 export default function Notes() {
   const notesContext=useContext(ncontext);
@@ -31,7 +32,7 @@ export default function Notes() {
   // eslint-disable-next-line
   useEffect(()=>{
     if(localStorage.getItem('token')){
-      if(!sessionStorage.getItem("fot")){
+      if(!sessionStorage.getItem("fot")||notesContext.notes.length===0){
         if(notesContext.fetchAllNotes()){
           sessionStorage.setItem("fot",true);
         }
@@ -51,8 +52,14 @@ export default function Notes() {
     <>
       <div className="mb-2 mt-3 pb-2 border-bottom">
         <h4 className="mb-3">Your Notes</h4>
-        <div className="row justify-content-center">
-            {notesContext.notes.map((note,i)=>{return <NoteItem key={i+note._id} note={note} deleteNote={handleDeleteNote} editNote={handleEditNote}/>})}
+        <div className="justify-content-center">
+        <ResponsiveMasonry
+                columnsCountBreakPoints={{300: 1, 765: 2, 1200: 3}}
+            >
+                <Masonry gutter='10px'>
+                  {notesContext.notes.map((note,i)=>{return <NoteItem key={i+note._id} note={note} deleteNote={handleDeleteNote} editNote={handleEditNote}/>})}
+                </Masonry>
+            </ResponsiveMasonry>
             {notesContext.notes.length<1?<h5>No Notes Found</h5>: <></> }
         </div>
         <DeleteNoteDialog note={currentNote}/>
