@@ -5,7 +5,8 @@ import DeleteNoteDialog from './DeleteNoteDialog';
 import EditNoteDialog from './EditNoteDialog';
 import { useNavigate } from 'react-router-dom';
 import alertContext from '../../context/alert/AlertContext';
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { Masonry } from '@mui/lab';
+
 
 export default function Notes() {
   const notesContext=useContext(ncontext);
@@ -52,15 +53,12 @@ export default function Notes() {
     <>
       <div className="mb-2 mt-3 pb-2 border-bottom">
         <h4 className="mb-3">Your Notes</h4>
-        <div className="justify-content-center">
-        <ResponsiveMasonry
-                columnsCountBreakPoints={{300: 1, 765: 2, 1200: 3}}
-            >
-                <Masonry gutter='10px'>
-                  {notesContext.notes.map((note,i)=>{return <NoteItem key={i+note._id} note={note} deleteNote={handleDeleteNote} editNote={handleEditNote}/>})}
-                </Masonry>
-            </ResponsiveMasonry>
-            {notesContext.notes.length<1?<h5>No Notes Found</h5>: <></> }
+        <div className="row justify-content-center">
+          <Masonry columns={{xs:1,sm:1,md:2,lg:3,xl:4}} spacing={1}>
+          {notesContext.notes.map((note,i)=>{return <NoteItem key={i+note._id} note={note} deleteNote={handleDeleteNote} editNote={handleEditNote}/>})}
+          {!notesContext.notes.length && <h5 className='text-center'>No Notes Found</h5> }
+          </Masonry>
+
         </div>
         <DeleteNoteDialog note={currentNote}/>
         <EditNoteDialog note={currentNote}/>

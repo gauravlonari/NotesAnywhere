@@ -93,7 +93,6 @@ export default function NoteState(props) {
           "auth-token":
           localStorage.getItem('token'),
         },
-        
       });
       setProgress(40);
       note = await data.json();
@@ -186,7 +185,7 @@ export default function NoteState(props) {
           return false;
         }
         showAlert("success", "Note Created");
-        setNotes(notes.concat(note));
+        setNotes([note].concat(notes));
         setProgress(100);
         return true;
       }
