@@ -26,7 +26,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "fsapp": "concurrently \"npm run start\" \"nodemon backend/index.js\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -49,7 +48,6 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^7.6.0",
     "gh-pages": "^4.0.0"
   }
 }

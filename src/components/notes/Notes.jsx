@@ -43,7 +43,7 @@ export default function Notes() {
       }
     }
     else{
-      navigate('/session/login');
+      navigate('/app/login');
       showAlert("info","Please Login first to continue");
     }
     // eslint-disable-next-line

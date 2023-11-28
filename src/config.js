@@ -1,3 +1,5 @@
-// const host="http://localhost:5000"
-const host=process.env.REACT_APP_BACKEND_URL
-export default host;
+const HOST_URL=process.env.REACT_APP_BACKEND_URL;
+const APP_ID=process.env.REACT_APP_NAME;
+export {
+    HOST_URL, APP_ID
+};

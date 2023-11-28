@@ -38,21 +38,21 @@ function App() {
                 <Route path="about" element={<About />}></Route>
                 <Route
                   path="login"
-                  element={<Navigate to="/session/login" replace />}
+                  element={<Navigate to="/app/login" replace />}
                 ></Route>
                 <Route
                   path="register"
-                  element={<Navigate to="/session/register" replace />}
+                  element={<Navigate to="/app/register" replace />}
                 ></Route>
                 <Route
                   path="changepassword"
-                  element={<Navigate to="/session/changepassword" replace />}
+                  element={<Navigate to="/app/changepassword" replace />}
                 ></Route>
                 <Route
                   path="home"
                   element={<Navigate to="/" replace />}
                 ></Route>
-                <Route path="session" element={<Session />}>
+                <Route path="app" element={<Session />}>
                   <Route index element={<Login />}></Route>
                   <Route path="login" element={<Login />}></Route>
                   <Route path="register" element={<Register />}></Route>

@@ -23,7 +23,7 @@ export default function Profile() {
             <span className="card-text">
               <p className="mb-0">Email: {userData.email}</p>
               <p className='text-muted mb-1'>Account Created Date: {getPrintDate(userData.dateCreated)}</p>
-              <NavLink to="/session/changepassword" className="text-decoration-none">Change Password</NavLink>
+              <NavLink to="/app/changepassword" className="text-decoration-none">Change Password</NavLink>
             </span>
           </div>
       </div>

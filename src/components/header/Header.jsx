@@ -30,10 +30,10 @@ export default function Header() {
                     </li>
                 </ul>
                 <form className="d-flex">
-                    <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/login") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="/session/login">Login</NavLink>
+                    <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/login") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="/app/login">Login</NavLink>
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(currentLocation.includes("/register") || localStorage.getItem('token')?"visually-hidden":"")}`} role="button" to="session/register">Register</NavLink>
                     <NavLink className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token') && !currentLocation.includes("/profile")?"":"visually-hidden")}`} role="button" to="profile">Profile</NavLink>
-                    <button className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} onClick={(e)=>{e.preventDefault();setNotes([]);setProgress(30);localStorage.removeItem('token');setProgress(70);sessionStorage.removeItem('fot');setProgress(100);navigate('/session/login');}}>Logout</button>
+                    <button className={`btn btn-sm btn-primary mx-1 ${(localStorage.getItem('token')?"":"visually-hidden")}`} onClick={(e)=>{e.preventDefault();setNotes([]);setProgress(30);localStorage.removeItem('token');setProgress(70);sessionStorage.removeItem('fot');setProgress(100);navigate('/app/login');}}>Logout</button>
                 </form>
                 {/* <form className={`d-flex ${currentLocation ==="/"?"":"visually-hidden"}`} role="search" onSubmit={event=>{event.preventDefault()}}>
                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>

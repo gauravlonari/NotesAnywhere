@@ -16,7 +16,7 @@ export default function ChangePassword() {
   const {progress}=useContext(loadingContext)
   useEffect(()=>{
     if(!localStorage.getItem('token')){
-      navigate('/session/login');
+      navigate('/app/login');
       showAlert("info","Please Login first to continue");
     }
     // eslint-disable-next-line

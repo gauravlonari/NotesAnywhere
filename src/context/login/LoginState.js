@@ -1,6 +1,6 @@
 import React from "react";
 import loginContext from "./LoginContext";
-import host from "../../config";
+import host, { APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,11 +19,11 @@ export default function LoginState(props) {
         showAlert("info", "You need to login first");
         localStorage.removeItem("token");
         setProgress(100);
-        navigate("/session/login");
+        navigate("/app/login");
       } catch (e) {
         console.log(e.message);
         setProgress(100);
-        navigate("/session/login");
+        navigate("/app/login");
       }
       return false;
     }
@@ -39,7 +39,8 @@ export default function LoginState(props) {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+          'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+          appId: APP_ID
         },
         body: JSON.stringify(creds),
       });
@@ -69,6 +70,7 @@ export default function LoginState(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          appId: APP_ID
         },
         body: JSON.stringify(creds),
       });
@@ -97,7 +99,8 @@ export default function LoginState(props) {
       const data = await fetch(host + "/api/auth/getuser", {
         method: "POST",
         headers: {
-          "auth-token": localStorage.getItem('token'),
+          "Authorization": localStorage.getItem('token'),
+          appId: APP_ID
         },
       });
       setProgress(40)
@@ -124,8 +127,9 @@ export default function LoginState(props) {
         const data = await fetch(host + "/api/auth/changepassword", {
           method: "POST",
           headers: {
-            "auth-token": localStorage.getItem('token'),
-            "Content-Type":"application/json"
+            "Authorization": localStorage.getItem('token'),
+            "Content-Type":"application/json",
+            appId: APP_ID
           },
           body:JSON.stringify({password:pass,newpassword:newpass})
         });

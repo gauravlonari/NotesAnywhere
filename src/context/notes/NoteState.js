@@ -1,7 +1,7 @@
 import React from "react";
 import noteContext from "./NoteContext";
 import { useState } from "react";
-import host from "../../config";
+import host, { APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,11 +18,11 @@ export default function NoteState(props) {
         showAlert("info", "You need to login first");
         localStorage.removeItem("token");
         setProgress(100);
-        navigate("/session/login");
+        navigate("/app/login");
       } catch (e) {
         console.log(e.message);
         setProgress(100);
-        navigate("/session/login");
+        navigate("/app/login");
       }
       return false;
     }
@@ -36,8 +36,9 @@ export default function NoteState(props) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
+          "Authorization":
             localStorage.getItem('token'),
+          appId: APP_ID
         },
       });
       setProgress(40);
@@ -90,8 +91,9 @@ export default function NoteState(props) {
         }),
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
+          "Authorization":
           localStorage.getItem('token'),
+          appId: APP_ID
         },
       });
       setProgress(40);
@@ -131,8 +133,9 @@ export default function NoteState(props) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
+          "Authorization":
           localStorage.getItem('token'),
+          appId: APP_ID
         },
       });
       setProgress(40);
@@ -170,8 +173,9 @@ export default function NoteState(props) {
         body: JSON.stringify(note),
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
+          "Authorization":
           localStorage.getItem('token'),
+          appId: APP_ID
         },
       });
       setProgress(40);

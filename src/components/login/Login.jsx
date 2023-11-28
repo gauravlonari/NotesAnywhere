@@ -47,7 +47,7 @@ export default function Login() {
                     <TextField label="Password" minLength="8" type="password" name='password' title='Enter the password' placeholder='Enter your password here' value={credentials.password} onChange={onChange} error={passwordError.error} helperText={passwordError.errorText} required fullWidth />
                 </div>
                 <div className="mb-3">
-                    <NavLink className="text-decoration-none" to="/session/register">Don't have an account, sign up now</NavLink>
+                    <NavLink className="text-decoration-none" to="/app/register">Don't have an account, sign up now</NavLink>
                 </div>
 
                 {/* <div className="mb-3 form-check">

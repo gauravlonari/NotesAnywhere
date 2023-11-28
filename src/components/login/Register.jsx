@@ -71,7 +71,7 @@ export default function Register() {
                     <TextField label="Confirm Password" type="password" name='cpassword' title='Confirm the password' placeholder='Enter the password again' value={credentials.cpassword} onChange={onChange} error={cpasswordError.error} helperText={cpasswordError.errorText} required fullWidth />
                 </div>
                 <div className="mb-3">
-                    <NavLink className="text-decoration-none" to="/session/login">Already have an account, sign in here</NavLink>
+                    <NavLink className="text-decoration-none" to="/app/login">Already have an account, sign in here</NavLink>
                 </div>
 
                 {/* <div className="mb-3 form-check">
