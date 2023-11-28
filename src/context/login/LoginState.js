@@ -1,6 +1,6 @@
 import React from "react";
 import loginContext from "./LoginContext";
-import host, { APP_ID } from "../../config";
+import { HOST_URL, APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ export default function LoginState(props) {
   const userLogin = async (creds) => {
     try {
       setProgress(10);
-      const data = await fetch(host + "/api/auth/login", {
+      const data = await fetch(HOST_URL + "/api/auth/login", {
         // mode:"no-cors",
         method: "POST",
         headers: {
@@ -66,7 +66,7 @@ export default function LoginState(props) {
   const userRegister = async (creds) => {
     try {
       setProgress(10)
-      const data = await fetch(host + "/api/auth/createuser", {
+      const data = await fetch(HOST_URL + "/api/auth/createuser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default function LoginState(props) {
   const userGetProfile=async ()=>{
     try {
       setProgress(10)
-      const data = await fetch(host + "/api/auth/getuser", {
+      const data = await fetch(HOST_URL + "/api/auth/getuser", {
         method: "POST",
         headers: {
           "Authorization": localStorage.getItem('token'),
@@ -124,7 +124,7 @@ export default function LoginState(props) {
     const userChangePassword=async (pass,newpass)=>{
       try{
         setProgress(10)
-        const data = await fetch(host + "/api/auth/changepassword", {
+        const data = await fetch(HOST_URL + "/api/auth/changepassword", {
           method: "POST",
           headers: {
             "Authorization": localStorage.getItem('token'),

@@ -1,7 +1,7 @@
 import React from "react";
 import noteContext from "./NoteContext";
 import { useState } from "react";
-import host, { APP_ID } from "../../config";
+import {HOST_URL, APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ export default function NoteState(props) {
   const fetchAllNotes = async () => {
     try {
       setProgress(10);
-      const data = await fetch(host + "/api/notes/fetchallnotes", {
+      const data = await fetch(HOST_URL + "/api/notes/fetchallnotes", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export default function NoteState(props) {
     // console.log("update")
     setProgress(10);
     try {
-      const data = await fetch(host + "/api/notes/updatenote/" + note._id, {
+      const data = await fetch(HOST_URL + "/api/notes/updatenote/" + note._id, {
         method: "PUT",
         body: JSON.stringify({
           title: note.title,
@@ -129,7 +129,7 @@ export default function NoteState(props) {
     // console.log("delete")
     setProgress(10);
     try {
-      const data = await fetch(host + "/api/notes/deletenote/" + id, {
+      const data = await fetch(HOST_URL + "/api/notes/deletenote/" + id, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -168,7 +168,7 @@ export default function NoteState(props) {
   const addNote = async (note) => {
     setProgress(10);
     try {
-      const data = await fetch(host + "/api/notes/addnote", {
+      const data = await fetch(HOST_URL + "/api/notes/addnote", {
         method: "POST",
         body: JSON.stringify(note),
         headers: {
