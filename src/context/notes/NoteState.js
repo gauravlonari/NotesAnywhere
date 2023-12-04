@@ -16,9 +16,9 @@ export default function NoteState(props) {
     if (status === 401) {
       try {
         showAlert("info", "You need to login first");
-        // localStorage.removeItem("token");
+        localStorage.removeItem("token");
         setProgress(100);
-        // navigate("/app/login");
+        navigate("/app/login");
       } catch (e) {
         console.log(e.message);
         setProgress(100);
