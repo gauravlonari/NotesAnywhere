@@ -2,6 +2,7 @@
   "name": "notesanywhere",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://gauravlonari.github.io/NotesAnywhere",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
