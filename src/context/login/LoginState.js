@@ -4,14 +4,14 @@ import { HOST_URL, APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import loadingContext from '../loading/LoadingContext'
+import loadingContext from "../loading/LoadingContext";
 
 export default function LoginState(props) {
   const { showAlert } = useContext(alertContext);
   const navigate = useNavigate();
-  
+
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const {setProgress}=useContext(loadingContext);
+  const { setProgress } = useContext(loadingContext);
 
   const checkUnauthorized = (status) => {
     if (status === 401) {
@@ -39,16 +39,17 @@ export default function LoginState(props) {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          'Access-Control-Allow-Methods':'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-          appId: APP_ID
+          "Access-Control-Allow-Methods":
+            "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+          app_id: APP_ID,
         },
         body: JSON.stringify(creds),
       });
       setProgress(40);
       const jsonData = await data.json();
-      setProgress(70)
+      setProgress(70);
       if (data.status !== 200) {
-        showAlert("danger", jsonData.error);
+        jsonData?.errors?.forEach((error) => showAlert("danger", error.msg));
         setProgress(100);
         return;
       }
@@ -60,104 +61,105 @@ export default function LoginState(props) {
     } catch (e) {
       showAlert("danger", "Some Error Occured");
       console.log(e);
-      setProgress(100)
+      setProgress(100);
     }
   };
   const userRegister = async (creds) => {
     try {
-      setProgress(10)
-      const data = await fetch(HOST_URL + "/api/auth/createuser", {
+      setProgress(10);
+      const data = await fetch(HOST_URL + "/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          appId: APP_ID
+          app_id: APP_ID,
         },
         body: JSON.stringify(creds),
       });
       setProgress(40);
       const jsonData = await data.json();
-      setProgress(70)
+      setProgress(70);
       if (data.status !== 200) {
-        showAlert("danger", jsonData.error);
+        jsonData?.errors?.forEach((error) => showAlert("danger", error.msg));
         setProgress(100);
         return;
       }
       localStorage.setItem("token", jsonData.authToken);
       showAlert("success", "Registration successful. Logged in");
-      setProgress(100)
+      setProgress(100);
       navigate("/");
     } catch (e) {
       showAlert("danger", "Some Error Occured");
       console.log(e.message);
-      setProgress(100)
+      setProgress(100);
     }
   };
 
-  const userGetProfile=async ()=>{
+  const userGetProfile = async () => {
     try {
-      setProgress(10)
+      setProgress(10);
       const data = await fetch(HOST_URL + "/api/auth/getuser", {
-        method: "POST",
+        method: "GET",
         headers: {
-          "Authorization": localStorage.getItem('token'),
-          appId: APP_ID
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          app_id: APP_ID,
         },
       });
-      setProgress(40)
+      setProgress(40);
       const jsonData = await data.json();
-      setProgress(70)
-      if(checkUnauthorized(data.status)){
+      setProgress(70);
+      if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
           showAlert("danger", jsonData.error);
-          setProgress(100)
+          setProgress(100);
           return null;
         }
-        setProgress(100)
+        setProgress(100);
         return jsonData;
       }
-      } catch (e) {
-        showAlert("danger", "Some Error Occured");
-        console.log(e.message);
-        setProgress(100)
-      }
+    } catch (e) {
+      showAlert("danger", "Some Error Occured");
+      console.log(e.message);
+      setProgress(100);
     }
-    const userChangePassword=async (pass,newpass)=>{
-      try{
-        setProgress(10)
-        const data = await fetch(HOST_URL + "/api/auth/changepassword", {
-          method: "POST",
-          headers: {
-            "Authorization": localStorage.getItem('token'),
-            "Content-Type":"application/json",
-            appId: APP_ID
-          },
-          body:JSON.stringify({password:pass,newpassword:newpass})
-        });
-        setProgress(40)
-        const jsonData = await data.json();
-        setProgress(70)
-        if(checkUnauthorized(data.status)){
-          if (data.status !== 200) {
-            showAlert("danger", jsonData.error);
-            setProgress(100)
-            return false;
-          }
-          showAlert("success","Password Changed");
-          setProgress(100)
-          navigate('/')
-          return true;
+  };
+  const userChangePassword = async (pass, newpass) => {
+    try {
+      setProgress(10);
+      const data = await fetch(HOST_URL + "/api/auth/changepassword", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type": "application/json",
+          app_id: APP_ID,
+        },
+        body: JSON.stringify({ password: pass, newpassword: newpass }),
+      });
+      setProgress(40);
+      const jsonData = await data.json();
+      setProgress(70);
+      if (checkUnauthorized(data.status)) {
+        if (data.status !== 200) {
+          showAlert("danger", jsonData.error);
+          setProgress(100);
+          return false;
         }
+        showAlert("success", "Password Changed");
+        setProgress(100);
+        navigate("/");
+        return true;
       }
-      catch(e){
-        console.log(e.message)
-        showAlert("danger","Some Error Occured")
-        setProgress(100)
-        return false;
-      }
+    } catch (e) {
+      console.log(e.message);
+      showAlert("danger", "Some Error Occured");
+      setProgress(100);
+      return false;
     }
+  };
 
   return (
-    <loginContext.Provider value={{ userLogin, userRegister,userGetProfile,userChangePassword }}>
+    <loginContext.Provider
+      value={{ userLogin, userRegister, userGetProfile, userChangePassword }}
+    >
       {props.children}
     </loginContext.Provider>
   );

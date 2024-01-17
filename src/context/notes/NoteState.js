@@ -37,8 +37,8 @@ export default function NoteState(props) {
         headers: {
           "Content-Type": "application/json",
           "Authorization":
-            localStorage.getItem('token'),
-          appId: APP_ID
+          'Bearer '+ localStorage.getItem('token'),
+          app_id: APP_ID
         },
       });
       setProgress(40);
@@ -92,8 +92,8 @@ export default function NoteState(props) {
         headers: {
           "Content-Type": "application/json",
           "Authorization":
-          localStorage.getItem('token'),
-          appId: APP_ID
+          'Bearer '+ localStorage.getItem('token'),
+          app_id: APP_ID
         },
       });
       setProgress(40);
@@ -134,8 +134,8 @@ export default function NoteState(props) {
         headers: {
           "Content-Type": "application/json",
           "Authorization":
-          localStorage.getItem('token'),
-          appId: APP_ID
+          'Bearer '+ localStorage.getItem('token'),
+          app_id: APP_ID
         },
       });
       setProgress(40);
@@ -174,8 +174,8 @@ export default function NoteState(props) {
         headers: {
           "Content-Type": "application/json",
           "Authorization":
-          localStorage.getItem('token'),
-          appId: APP_ID
+          'Bearer '+ localStorage.getItem('token'),
+          app_id: APP_ID
         },
       });
       setProgress(40);

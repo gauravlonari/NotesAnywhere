@@ -17,11 +17,10 @@ export default function Register() {
     // eslint-disable-next-line
     },[])
     const { userRegister } = useContext(loginContext);
-    const [credentials, setCredentials] = useState({ name:"", email: "", password: "",cpassword:""});
+    const [credentials, setCredentials] = useState({ firstName:"", lastName: "", email: "", password: "",cpassword:""});
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
     }
-    const [nameError, setNameError] = useState({error:false,errorText:""});
     const [passwordError, setPasswordError] = useState({error:false,errorText:""});
     const [cpasswordError, setCpasswordError] = useState({error:false,errorText:""});
     
@@ -43,13 +42,6 @@ export default function Register() {
         else
             setCpasswordError({error:false,errorText:""})
         
-        if(!/^[a-zA-Z]+$/.test(credentials.name)){
-            setNameError({error:true,errorText:"Username must contain alphabetic characters only"})
-            error=true;
-        }
-        else
-            setNameError({error:false,errorText:""})
-        
 
         if(error) return;
         userRegister(credentials);
@@ -59,7 +51,10 @@ export default function Register() {
             <form onSubmit={submitForm}>
                 <p className="fs-5">Fill in the following details: </p>
                 <div className="mb-3">
-                    <TextField label="Username" type="text" name='name' title='Username with no space and special characters' placeholder='Enter your name here' value={credentials.name} onChange={onChange} error={nameError.error} helperText={nameError.errorText} required fullWidth />
+                    <TextField label="First Name" type="text" name='firstName' title='First Name' placeholder='Enter first name here' value={credentials.firstName} onChange={onChange} required fullWidth />
+                </div>
+                <div className="mb-3">
+                    <TextField label="Last Name" type="text" name='lastName' title='Last Name' placeholder='Enter last name here' value={credentials.lastName} onChange={onChange} required fullWidth />
                 </div>
                 <div className="mb-3">
                     <TextField label="Email" type="email" name='email' title='Enter your valid email' placeholder='Enter your email here' value={credentials.email} onChange={onChange}  required fullWidth />
