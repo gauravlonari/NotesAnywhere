@@ -1,16 +1,16 @@
 import React from "react";
 import noteContext from "./NoteContext";
 import { useState } from "react";
-import {HOST_URL, APP_ID } from "../../config";
+import { HOST_URL, APP_ID } from "../../config";
 import alertContext from "../alert/AlertContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import loadingContext from '../loading/LoadingContext'
+import loadingContext from "../loading/LoadingContext";
 
 export default function NoteState(props) {
   const navigate = useNavigate();
   const { showAlert } = useContext(alertContext);
-  const {setProgress}=useContext(loadingContext);
+  const { setProgress } = useContext(loadingContext);
 
   const checkUnauthorized = (status) => {
     if (status === 401) {
@@ -32,13 +32,12 @@ export default function NoteState(props) {
   const fetchAllNotes = async () => {
     try {
       setProgress(10);
-      const data = await fetch(HOST_URL + "/api/notes/fetchallnotes", {
+      const data = await fetch(HOST_URL + "/api/note/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization":
-          'Bearer '+ localStorage.getItem('token'),
-          app_id: APP_ID
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          app_id: APP_ID,
         },
       });
       setProgress(40);
@@ -46,11 +45,11 @@ export default function NoteState(props) {
       setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
-          showAlert("danger", ns.error);
+          showAlert("danger", ns.message);
           setProgress(100);
           return false;
         } else {
-          setNotes(ns);
+          setNotes(ns.data);
           setProgress(100);
           return true;
         }
@@ -81,8 +80,9 @@ export default function NoteState(props) {
   const updateNote = async (note) => {
     // console.log("update")
     setProgress(10);
+    const id = note._id;
     try {
-      const data = await fetch(HOST_URL + "/api/notes/updatenote/" + note._id, {
+      const data = await fetch(HOST_URL + "/api/note/" + id, {
         method: "PUT",
         body: JSON.stringify({
           title: note.title,
@@ -91,9 +91,8 @@ export default function NoteState(props) {
         }),
         headers: {
           "Content-Type": "application/json",
-          "Authorization":
-          'Bearer '+ localStorage.getItem('token'),
-          app_id: APP_ID
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          app_id: APP_ID,
         },
       });
       setProgress(40);
@@ -101,14 +100,14 @@ export default function NoteState(props) {
       setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
-          showAlert("danger", note.error);
+          showAlert("danger", note.message);
           setProgress(100);
           return false;
         }
         showAlert("success", "Note Updated");
         setNotes(
           notes.map((n) => {
-            return n._id === note._id ? note : n;
+            return n._id === id ? note.data : n;
           })
         );
         setProgress(100);
@@ -129,13 +128,12 @@ export default function NoteState(props) {
     // console.log("delete")
     setProgress(10);
     try {
-      const data = await fetch(HOST_URL + "/api/notes/deletenote/" + id, {
+      const data = await fetch(HOST_URL + "/api/note/" + id, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "Authorization":
-          'Bearer '+ localStorage.getItem('token'),
-          app_id: APP_ID
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          app_id: APP_ID,
         },
       });
       setProgress(40);
@@ -143,7 +141,7 @@ export default function NoteState(props) {
       setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
-          showAlert("danger", note.error);
+          showAlert("danger", note.message);
           setProgress(100);
           return;
         }
@@ -168,14 +166,13 @@ export default function NoteState(props) {
   const addNote = async (note) => {
     setProgress(10);
     try {
-      const data = await fetch(HOST_URL + "/api/notes/addnote", {
+      const data = await fetch(HOST_URL + "/api/note/", {
         method: "POST",
         body: JSON.stringify(note),
         headers: {
           "Content-Type": "application/json",
-          "Authorization":
-          'Bearer '+ localStorage.getItem('token'),
-          app_id: APP_ID
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          app_id: APP_ID,
         },
       });
       setProgress(40);
@@ -183,13 +180,14 @@ export default function NoteState(props) {
       setProgress(70);
 
       if (checkUnauthorized(data.status)) {
-        if (data.status !== 201) {
-          showAlert("danger", note.error);
+        if (data.status !== 200) {
+          note.data?.forEach((error) => showAlert("danger", error.msg));
           setProgress(100);
           return false;
         }
         showAlert("success", "Note Created");
-        setNotes([note].concat(notes));
+        console.log(note);
+        setNotes([note.data].concat(notes));
         setProgress(100);
         return true;
       }

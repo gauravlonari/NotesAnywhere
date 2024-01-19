@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom'
 
 export default function Profile() {
   const { userGetProfile } = useContext(loginContext);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
   // eslint-disable-next-line
   useEffect(() => { const a = async () => { setUserData(await userGetProfile()) }; a(); }, []);
 
@@ -16,7 +16,7 @@ export default function Profile() {
       <p className="fs-4 text-center">
         Profile Details
       </p>
-      <div className="card text-center">
+      {userData && <div className="card text-center">
         <img src={profileIcon} className="card-img-top m-auto" style={{maxWidth:"18rem"}} alt="profileIcon"/>
           <div className="card-body">
             <h5 className="card-title">{userData.firstName} {userData.lastName}</h5>
@@ -26,7 +26,7 @@ export default function Profile() {
               <NavLink to="/app/changepassword" className="text-decoration-none">Change Password</NavLink>
             </span>
           </div>
-      </div>
+      </div>}
     </div>
   )
 }

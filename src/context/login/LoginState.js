@@ -49,11 +49,11 @@ export default function LoginState(props) {
       const jsonData = await data.json();
       setProgress(70);
       if (data.status !== 200) {
-        jsonData?.errors?.forEach((error) => showAlert("danger", error.msg));
+        jsonData.data?.forEach((error) => showAlert("danger", error.msg));
         setProgress(100);
         return;
       }
-      localStorage.setItem("token", jsonData.authToken);
+      localStorage.setItem("token", jsonData.data.authToken);
       showAlert("success", "Login successful.");
       setProgress(90);
       navigate("/");
@@ -79,7 +79,7 @@ export default function LoginState(props) {
       const jsonData = await data.json();
       setProgress(70);
       if (data.status !== 200) {
-        jsonData?.errors?.forEach((error) => showAlert("danger", error.msg));
+        jsonData.data?.forEach((error) => showAlert("danger", error.msg));
         setProgress(100);
         return;
       }
@@ -97,7 +97,7 @@ export default function LoginState(props) {
   const userGetProfile = async () => {
     try {
       setProgress(10);
-      const data = await fetch(HOST_URL + "/api/auth/getuser", {
+      const data = await fetch(HOST_URL + "/api/auth/user", {
         method: "GET",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -109,12 +109,12 @@ export default function LoginState(props) {
       setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
-          showAlert("danger", jsonData.error);
+          showAlert("danger", jsonData.message);
           setProgress(100);
           return null;
         }
         setProgress(100);
-        return jsonData;
+        return jsonData.data;
       }
     } catch (e) {
       showAlert("danger", "Some Error Occured");
@@ -126,20 +126,20 @@ export default function LoginState(props) {
     try {
       setProgress(10);
       const data = await fetch(HOST_URL + "/api/auth/changepassword", {
-        method: "POST",
+        method: "PUT",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
           "Content-Type": "application/json",
           app_id: APP_ID,
         },
-        body: JSON.stringify({ password: pass, newpassword: newpass }),
+        body: JSON.stringify({ password: pass, newPassword: newpass }),
       });
       setProgress(40);
       const jsonData = await data.json();
       setProgress(70);
       if (checkUnauthorized(data.status)) {
         if (data.status !== 200) {
-          showAlert("danger", jsonData.error);
+          jsonData.data?.forEach((error) => showAlert("danger", error.msg));
           setProgress(100);
           return false;
         }
